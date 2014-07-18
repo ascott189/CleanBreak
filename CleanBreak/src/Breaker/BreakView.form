@@ -145,6 +145,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Convert"/>
       </Properties>
+      <Events>
+        <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnStartMouseReleased"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
