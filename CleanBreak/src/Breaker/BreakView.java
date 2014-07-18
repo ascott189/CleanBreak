@@ -179,8 +179,12 @@ public class BreakView extends javax.swing.JFrame {
 
    private void btnStartMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnStartMouseReleased
       // TODO add your handling code here:
+<<<<<<< HEAD
       VideoTool VT = new VideoTool();
       VT.Convert();
+=======
+      
+>>>>>>> FETCH_HEAD
    }//GEN-LAST:event_btnStartMouseReleased
 
    public void SetWarningText(String WarningText) {
