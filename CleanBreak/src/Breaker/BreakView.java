@@ -98,6 +98,11 @@ public class BreakView extends javax.swing.JFrame {
       btnOptions.setText("Options");
 
       btnStart.setText("Convert");
+      btnStart.addMouseListener(new java.awt.event.MouseAdapter() {
+         public void mouseReleased(java.awt.event.MouseEvent evt) {
+            btnStartMouseReleased(evt);
+         }
+      });
 
       javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
       getContentPane().setLayout(layout);
@@ -171,6 +176,12 @@ public class BreakView extends javax.swing.JFrame {
          }
       }
    }//GEN-LAST:event_btnSelectFilesMouseClicked
+
+   private void btnStartMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnStartMouseReleased
+      // TODO add your handling code here:
+      VideoTool VT = new VideoTool();
+      VT.Convert();
+   }//GEN-LAST:event_btnStartMouseReleased
 
    public void SetWarningText(String WarningText) {
       dlgWarning.setVisible(true);
