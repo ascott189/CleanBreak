@@ -1,0 +1,37 @@
+<synth>
+
+<!-- Style that all regions will use -->
+	<style id="backingStyle">
+		<!-- Make all the regions opaque-->
+		<opaque value="TRUE"/>
+		<font name="Dialog" size="14"/>
+		<state>
+	  		<color value="#5d8aa8" type="BACKGROUND"/>
+	  		<color value="#f2f3f4" type="FOREGROUND"/>
+		</state>
+  	</style>
+  	<bind style="backingStyle" type="region" key=".*"/>
+
+	<style id="textfield">
+		<insets top="4" left="6" bottom="4" right="6"/>
+		<state>
+			<font name="Verdana" size="14"/>
+			<color value="#89cff0" type="BACKGROUND"/>
+			<color value="#000000" type="TEXT_FOREGROUND"/>
+		</state>
+	</style>
+	<bind style="textfield" type="region" key="TextField"/>
+
+	<style id="button">
+		<!-- Shift the text one pixel when pressed -->
+		<property key="Button.textShiftOffset" type="integer" value="1"/>
+	  	<!-- set size of buttons -->
+		<insets top="15" left="20" bottom="15" right="20"/>
+			<state>
+				<font name="Dialog" size="16"/>
+				<color value="#FFFFFF" type="TEXT_FOREGROUND"/>
+			</state>
+	</style>
+	<bind style="button" type="region" key="Button"/>
+
+</synth>
