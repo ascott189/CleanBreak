@@ -11,26 +11,60 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.SwingUtilities;
-import javax.swing.*;
 import Breaker.VideoTool.*;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.plaf.synth.*;
 
 
 /**
  *
  * @author a-scott-1
  */
-public class BreakView extends javax.swing.JFrame {
+public class BreakView extends JFrame {
    // Class variables
    static File ToConvert = null;
-   static File ConvertDest = null;
+   static File Converted = null;
+   static boolean  cleanFileName = true;
    static String Preset = null;
+   static String[] PresetList = {"Universal",
+                                 "iPod",
+                                 "iPhone & iPod Touch",
+                                 "iPad",
+                                 "AppleTV",
+                                 "AppleTV 2",
+                                 "Android",
+                                 "Android Tablet",
+                                 "Normal",
+                                 "High Profile"};
    
 
    /**
     * Creates new form BreakView
     */
    public BreakView() {
+      //initLaF();
       initComponents();
+   }
+   
+   private static void initLaF() {
+      SynthLookAndFeel lookAndFeel = new SynthLookAndFeel();
+            try {
+            	
+            	// SynthLookAndFeel load() method throws a checked exception
+            	// (java.text.ParseException) so it must be handled
+            	lookAndFeel.load(BreakView.class.getResourceAsStream("laf.xml"),
+                				  BreakView.class);
+                UIManager.setLookAndFeel(lookAndFeel);
+            } 
+            
+            catch (ParseException | UnsupportedLookAndFeelException e) {
+                System.err.println("Couldn't get specified look and feel ("
+                                   + lookAndFeel
+                                   + "), for some reason.");
+                System.err.println("Using the default look and feel.");
+            }
    }
 
    /**
@@ -43,9 +77,17 @@ public class BreakView extends javax.swing.JFrame {
    private void initComponents() {
 
       FileDialog = new javax.swing.JFileChooser();
-      Options = new javax.swing.JOptionPane();
       dlgWarning = new javax.swing.JDialog();
       lblWarning = new javax.swing.JLabel();
+      OptionWindow = new javax.swing.JFrame();
+      jSeparator1 = new javax.swing.JSeparator();
+      lblLaFSelect = new javax.swing.JLabel();
+      btnLaFSelect = new javax.swing.JButton();
+      lblCleanFileName = new javax.swing.JLabel();
+      btnCleanFileName = new javax.swing.JToggleButton();
+      lblJunkData = new javax.swing.JLabel();
+      jScrollPane1 = new javax.swing.JScrollPane();
+      txtboxJunk = new javax.swing.JTextPane();
       btnSelectFiles = new javax.swing.JButton();
       btnDest = new javax.swing.JButton();
       ScrlPaneConversion = new javax.swing.JScrollPane();
@@ -72,6 +114,64 @@ public class BreakView extends javax.swing.JFrame {
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
       );
 
+      OptionWindow.setMinimumSize(new java.awt.Dimension(500, 500));
+
+      lblLaFSelect.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+      lblLaFSelect.setText("Choose an xml file to use for the theme");
+
+      btnLaFSelect.setText("Select file");
+
+      lblCleanFileName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+      lblCleanFileName.setText("Clean junk from the file name?");
+
+      btnCleanFileName.addChangeListener(new javax.swing.event.ChangeListener() {
+         public void stateChanged(javax.swing.event.ChangeEvent evt) {
+            btnCleanFileNameStateChanged(evt);
+         }
+      });
+
+      lblJunkData.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+      lblJunkData.setText("Enter below what should be considered file name junk, seperated by commas");
+
+      jScrollPane1.setViewportView(txtboxJunk);
+
+      javax.swing.GroupLayout OptionWindowLayout = new javax.swing.GroupLayout(OptionWindow.getContentPane());
+      OptionWindow.getContentPane().setLayout(OptionWindowLayout);
+      OptionWindowLayout.setHorizontalGroup(
+         OptionWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+         .addComponent(jSeparator1)
+         .addGroup(OptionWindowLayout.createSequentialGroup()
+            .addComponent(lblLaFSelect, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(btnLaFSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, OptionWindowLayout.createSequentialGroup()
+            .addComponent(lblCleanFileName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(btnCleanFileName, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+         .addComponent(jScrollPane1)
+         .addGroup(OptionWindowLayout.createSequentialGroup()
+            .addComponent(lblJunkData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addContainerGap())
+      );
+      OptionWindowLayout.setVerticalGroup(
+         OptionWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+         .addGroup(OptionWindowLayout.createSequentialGroup()
+            .addGroup(OptionWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+               .addComponent(lblLaFSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+               .addComponent(btnLaFSelect, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(18, 18, 18)
+            .addGroup(OptionWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+               .addComponent(btnCleanFileName)
+               .addComponent(lblCleanFileName))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(lblJunkData)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(170, 170, 170))
+      );
+
       setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
       btnSelectFiles.setText("Click to select files/folders to convert");
@@ -89,13 +189,23 @@ public class BreakView extends javax.swing.JFrame {
       });
 
       lstConversion.setModel(new javax.swing.AbstractListModel() {
-         String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+         String[] strings = { "Universal", "iPod", "iPhone & iPod Touch", "iPad", "AppleTV", "AppleTV 2", "Android", "Android Tablet", "Normal", "High Profile" };
          public int getSize() { return strings.length; }
          public Object getElementAt(int i) { return strings[i]; }
+      });
+      lstConversion.addMouseListener(new java.awt.event.MouseAdapter() {
+         public void mouseReleased(java.awt.event.MouseEvent evt) {
+            lstConversionMouseReleased(evt);
+         }
       });
       ScrlPaneConversion.setViewportView(lstConversion);
 
       btnOptions.setText("Options");
+      btnOptions.addMouseListener(new java.awt.event.MouseAdapter() {
+         public void mouseReleased(java.awt.event.MouseEvent evt) {
+            btnOptionsMouseReleased(evt);
+         }
+      });
 
       btnStart.setText("Convert");
       btnStart.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -159,7 +269,7 @@ public class BreakView extends javax.swing.JFrame {
    File Dest = SelectFile(this, JFileChooser.DIRECTORIES_ONLY);
       if (Dest != null) {
          btnDest.setText(Dest.getAbsolutePath());
-         ConvertDest = Dest;
+         Converted = Dest;
       }
    }//GEN-LAST:event_btnDestMouseClicked
 
@@ -179,13 +289,24 @@ public class BreakView extends javax.swing.JFrame {
 
    private void btnStartMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnStartMouseReleased
       // TODO add your handling code here:
-<<<<<<< HEAD
       VideoTool VT = new VideoTool();
-      VT.Convert();
-=======
-      
->>>>>>> FETCH_HEAD
+      VT.ExectuteConvert();
    }//GEN-LAST:event_btnStartMouseReleased
+
+   private void lstConversionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstConversionMouseReleased
+      Preset = PresetList[lstConversion.getSelectedIndex()];
+   }//GEN-LAST:event_lstConversionMouseReleased
+
+   private void btnOptionsMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnOptionsMouseReleased
+      OptionWindow.show();
+      btnCleanFileName.setSelected(true);
+      btnCleanFileName.setText("Yes");
+   }//GEN-LAST:event_btnOptionsMouseReleased
+
+   private void btnCleanFileNameStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_btnCleanFileNameStateChanged
+      btnCleanFileName.setText(btnCleanFileName.isSelected() ? "Yes" : "No");
+      cleanFileName = btnCleanFileName.isSelected();
+   }//GEN-LAST:event_btnCleanFileNameStateChanged
 
    public void SetWarningText(String WarningText) {
       dlgWarning.setVisible(true);
@@ -195,6 +316,7 @@ public class BreakView extends javax.swing.JFrame {
    /**
     */
    public static void main() {
+      String lafStr = "laf.xml";
       /* Set the Nimbus look and feel */
        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
 //        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -221,6 +343,7 @@ public class BreakView extends javax.swing.JFrame {
       /* Create and display the form */
       java.awt.EventQueue.invokeLater(new Runnable() {
          public void run() {
+            //JFrame.setDefaultLookAndFeelDecorated(true);
             new BreakView().setVisible(true);
          }
       });
@@ -228,14 +351,22 @@ public class BreakView extends javax.swing.JFrame {
 
    // Variables declaration - do not modify//GEN-BEGIN:variables
    private javax.swing.JFileChooser FileDialog;
-   private javax.swing.JOptionPane Options;
+   private javax.swing.JFrame OptionWindow;
    private javax.swing.JScrollPane ScrlPaneConversion;
+   public static javax.swing.JToggleButton btnCleanFileName;
    private javax.swing.JButton btnDest;
+   private javax.swing.JButton btnLaFSelect;
    private javax.swing.JButton btnOptions;
    private javax.swing.JButton btnSelectFiles;
    private javax.swing.JButton btnStart;
    private javax.swing.JDialog dlgWarning;
+   private javax.swing.JScrollPane jScrollPane1;
+   private javax.swing.JSeparator jSeparator1;
+   private javax.swing.JLabel lblCleanFileName;
+   private javax.swing.JLabel lblJunkData;
+   private javax.swing.JLabel lblLaFSelect;
    private javax.swing.JLabel lblWarning;
    private javax.swing.JList lstConversion;
+   public static javax.swing.JTextPane txtboxJunk;
    // End of variables declaration//GEN-END:variables
 }
